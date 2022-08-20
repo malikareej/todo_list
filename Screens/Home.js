@@ -9,6 +9,7 @@ import AddListModal from './AddListModal';
 
 export default function Home() {
   const [todo, setTodo] = useState(false);
+  const [lists, setLists] = useState(tempData);
 
   const toggleAddTodoModal = () => {
     setTodo(true);
@@ -18,33 +19,48 @@ export default function Home() {
     setTodo(false);
   };
 
+  const renderList = list => {
+    return<TodoLists list={list} updateList={() => updateList()}/>
+  }
+
+  const addList = list => {
+    setLists([...lists, {...list, id: lists.length + 1, todo: []}])
+  }
+
+  const updateList = list => {
+    setLists(list.map(item => {
+      return item.id === list.id ? list : item;
+    }))
+  }
+
   return (
     <View style={styles.container}>
       <Modal animationType="slide" 
       visible={todo}
       onRequestClose={() => toggleAddTodoModal()}>
-        <AddListModal closeModal={() => closeModal()}/>
+      <AddListModal closeModal={() => closeModal()} addList={() => addList()}/>
       </Modal>
+
       <View style={{flexDirection: "row"}}>
       <View style={styles.divider}/>
       <Text style={styles.title}>Todo Lists
       </Text>
       <View style={styles.divider}/>
       </View>
+
       <View style={{marginVertical: 48}}>
         <TouchableOpacity style={styles.addlist} onPress={() => toggleAddTodoModal()}>
           <AntDesign name="plus" size={36} color={color.blue}/>
         </TouchableOpacity>
         <Text style={styles.add}>Add List</Text>
       </View>
+
       <View style={{height: 245, paddingLeft: 32}}>
-        <FlatList data={tempData}
+        <FlatList data={lists}
           keyExtractor={item => item.name}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          renderItem={({item}) => (
-            <TodoLists list={item}/>
-          )}/>
+          renderItem={({item}) => renderList(item)}/>
       </View>
     </View>
   )

@@ -7,22 +7,26 @@ import { useState } from "react";
 export default function AddListModal(props) {
    const backgroundColors = ["#5CD859", "#24A6D9", "#595BD9", "#8022D9", "#D159DB", "#D85963", "#D88559"];
 
-  const [changeColor, setChangeColor] = useState(backgroundColors[1]);
+  const [changeState, setChangeState] = useState({
+    name: "",
+    color: backgroundColors[0]
+  });
 
-  const renderColors = () => {
-    return backgroundColors.map(changeColor =>{
-      return(
-        <TouchableOpacity key={changeColor} 
-        style={[styles.colorSelect, {backgroundColors: changeColor}]}
-        onPress={() => setChangeColor(changeColor)}></TouchableOpacity>
-      )
-    }
-      )
-  };
+  const createTodo = () => {
+    const {name, color} = changeState
 
-  // const renderColors = () => {
-  //   setChangeColor(backgroundColors[1])
-  // };
+    // const list = {name, color};
+    // props.addList(list);
+    tempData.push({
+      name,
+      color,
+      todo: []
+    })
+    setChangeState({name: ""})
+    props.closeModal()
+    console.log(tempData)
+  }
+
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior= "padding">
@@ -33,11 +37,17 @@ export default function AddListModal(props) {
       <View style={{alignSelf: "stretch", marginHorizontal: 32}}>
           <Text style={styles.title}>Create Todo List</Text>
 
-          <TextInput style={styles.input} placeholder="Add List Name"/>
+          <TextInput style={styles.input} placeholder="Add List Name"
+          onChangeText={(text) => setChangeState(text)}/>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 13}}>
-         {() => renderColors()}
+          {backgroundColors.map(color => (
+            <TouchableOpacity key={color} style={[styles.colorSelect, { backgroundColor: color }]}
+              onPress={() => setChangeState(color)}
+            />
+          )
+          )}
           </View>
-          <TouchableOpacity style={[styles.create, {backgroundColor: color.lightblue}]}>
+          <TouchableOpacity style={[styles.create, {backgroundColor: changeState}]} onPress={() => createTodo()}>
               <Text style={{color: color.black, fontWeight: "700"}}>Create List</Text>
           </TouchableOpacity>
       </View>

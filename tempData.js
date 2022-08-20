@@ -1,5 +1,6 @@
 export default tempData=[
     {
+        id: 1,
         name: "Plan a trip",
         color: "#24A6D9",
         todo: [
@@ -27,6 +28,7 @@ export default tempData=[
     },
 
     {
+        id: 2,
         name: "Errands",
         color: "#8022D9",
         todo: [
@@ -54,6 +56,7 @@ export default tempData=[
     },
 
     {
+        id: 3,
         name: "Studies",
         color: "#1055D6",
         todo: [
